@@ -5,9 +5,10 @@ public class Pet {
     private Tipo tipo;
     private Sexo sexo;
     private String endereco;
-    private double idade;
-    private double peso;
+    private String idade;
+    private String peso;
     private String raca;
+    static final String NAOINFORME = "Não informado";
 
     public String getNome() {
         return nome;
@@ -15,13 +16,15 @@ public class Pet {
 
     public void setNome(String nome) {
         if (nome == null || nome.trim().isEmpty()){
-            throw new IllegalArgumentException("O pet precisa de nome e sobrenome");
+            this.nome = NAOINFORME;
         }
-        String regex = "[A-Za-z]+( [A-Za-z]+)+";
-        if (!nome.matches(regex)){
-            throw new IllegalArgumentException("O pet não pode ter nome com caracteres especiais ou números e precisa de nome sobrenome");
+        else {
+            String regex = "[A-Za-z]+( [A-Za-z]+)+";
+            if (!nome.matches(regex)) {
+                throw new IllegalArgumentException("O pet não pode ter nome com caracteres especiais ou números e precisa de nome sobrenome");
+            }
+            this.nome = nome;
         }
-        this.nome = nome;
     }
 
     public Tipo getTipo() {
@@ -68,43 +71,59 @@ public class Pet {
         Scanner sc = new Scanner(System.in);
         StringBuilder enderecoTemp = new StringBuilder();
         System.out.println("Número da casa?");
-        enderecoTemp.append("Casa: ").append(sc.nextLine()).append(", ");
-        System.out.println("Cidade?");
-        enderecoTemp.append("Cidade: ").append(sc.nextLine()).append(", ");
-        System.out.println("Rua?");
-        enderecoTemp.append("Rua: ").append(sc.nextLine());
-        if (enderecoTemp.isEmpty()){
-            throw new IllegalArgumentException("O pet precisa de um endereco");
+        enderecoTemp.append(sc.nextLine());
+        if (enderecoTemp.toString().isBlank() || enderecoTemp.isEmpty()){
+            this.endereco = NAOINFORME;
         }
-        this.endereco = enderecoTemp.toString();
-        System.out.println(endereco);
+        else {
+            System.out.println("Cidade?");
+            enderecoTemp.append(sc.nextLine());
+            System.out.println("Rua?");
+            enderecoTemp.append(sc.nextLine());
+            if (enderecoTemp.isEmpty()) {
+                throw new IllegalArgumentException("O pet precisa de um endereco");
+            }
+            this.endereco = enderecoTemp.toString();
+            System.out.println(endereco);
+        }
     }
 
-    public double getIdade() {
+    public String getIdade() {
         return idade;
     }
 
     public void setIdade(String idade) {
-        this.idade = Double.parseDouble(VerificadorDouble(idade));
-        if (this.idade > 1){
-            double resto;
-            resto = this.idade - (int)this.idade;
-            this.idade -= resto;
+        if (idade == null || idade.isBlank()) {
+            this.idade = NAOINFORME;
         }
-        if (this.idade > 20 || this.idade <= 0){
-            throw new IllegalArgumentException("Não aceito animais com mais de 20 anos ou com idade negativa");
+        else {
+            double temp = Double.parseDouble(VerificadorDouble(idade));
+            if (temp > 1) {
+                double resto;
+                resto = temp - (int) temp;
+                temp -= resto;
+            }
+            if (temp > 20 || temp <= 0) {
+                throw new IllegalArgumentException("Não aceito animais com mais de 20 anos ou com idade negativa");
+            }
+            this.idade = String.valueOf(temp);
         }
-        System.out.println(this.idade);
     }
 
-    public double getPeso() {
+    public String getPeso() {
         return peso;
     }
 
     public void setPeso(String peso) {
-        this.peso = Double.parseDouble(VerificadorDouble(peso));
-        if (this.peso > 60 || this.peso < 0.5){
-            throw  new IllegalArgumentException("O peso deve ser maior que 0.5kg ou menor que 60kg");
+        if (peso == null || peso.isBlank()) {
+            this.peso = NAOINFORME;
+        }
+        else {
+            double temp = Double.parseDouble(VerificadorDouble(peso));
+            if (temp > 60 || temp < 0.5) {
+                throw new IllegalArgumentException("O peso deve ser maior que 0.5kg ou menor que 60kg");
+            }
+            this.peso = String.valueOf(temp);
         }
     }
 
@@ -128,5 +147,18 @@ public class Pet {
             throw new IllegalArgumentException("O pet não pode ter nome com caracteres especiais ou números e precisa de nome sobrenome");
         }
         this.raca = raca;
+    }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "nome='" + nome + '\'' +
+                ", tipo=" + tipo +
+                ", sexo=" + sexo +
+                ", endereco='" + endereco + '\'' +
+                ", idade='" + idade + '\'' +
+                ", peso='" + peso + '\'' +
+                ", raca='" + raca + '\'' +
+                '}';
     }
 }

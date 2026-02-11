@@ -59,6 +59,7 @@ public class AdocaoPet {
                 novoPet.setPeso(sc.nextLine());
                 System.out.println(bufferedReader.readLine());
                 novoPet.setRaca(sc.nextLine());
+                System.out.println(novoPet);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
