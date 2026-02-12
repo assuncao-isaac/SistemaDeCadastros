@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class AdocaoPet {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int escolha = 0;
+        int escolha;
         do {
             File file = new File("menu.txt");
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -19,8 +19,7 @@ public class AdocaoPet {
                         cadastrarNovoPet();
                         break;
                     case 2:
-                    System.out.println("Qual o tipo do pet?(Cachorro/Gato)");
-                    buscadorDePet(sc.nextLine());
+                        buscadorDePet();
                         break;
                     case 3:
                         break;
@@ -47,7 +46,7 @@ public class AdocaoPet {
         File file = new File("formulario.txt");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             int contador = 1;
-            boolean sim;
+            boolean obrigatorioOK;
             for (String linha : bufferedReader.readAllLines()) {
                 System.out.println(linha);
                 switch (contador) {
@@ -56,13 +55,13 @@ public class AdocaoPet {
                         break;
                     case 2:
                         do {
-                            sim = novoPet.setTipo(sc.nextLine());
-                        }while (!sim);
+                            obrigatorioOK = novoPet.setTipo(sc.nextLine());
+                        } while (!obrigatorioOK);
                         break;
                     case 3:
                         do {
-                            sim = novoPet.setSexo(sc.nextLine());
-                        }while (!sim);
+                            obrigatorioOK = novoPet.setSexo(sc.nextLine());
+                        } while (!obrigatorioOK);
                         break;
                     case 4:
                         novoPet.setEndereco();
@@ -75,8 +74,8 @@ public class AdocaoPet {
                         break;
                     case 7:
                         do {
-                            sim = novoPet.setRaca(sc.nextLine());
-                        }while (!sim);
+                            obrigatorioOK = novoPet.setRaca(sc.nextLine());
+                        } while (!obrigatorioOK);
                         break;
                     default:
                         break;
@@ -94,7 +93,15 @@ public class AdocaoPet {
 
     }
 
-    private static void buscadorDePet(String procura) throws FileNotFoundException {
+    private static void buscadorDePet() throws FileNotFoundException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Qual o tipo do pet?(Cachorro/Gato)");
+        String procura = sc.nextLine().trim();
+        while (!procura.equalsIgnoreCase("cachorro") && !procura.equalsIgnoreCase("gato")) {
+            System.out.println("informar o tipo do pet é obrigatório");
+            procura = sc.nextLine();
+        }
+
         File pastaPet = new File("C:\\Users\\isaacassuncao\\IdeaProjects\\SistemaDeCadastros\\petsCadastrados");
         File[] pets = pastaPet.listFiles();
 
@@ -124,6 +131,7 @@ public class AdocaoPet {
                 }
             }
         }
+        System.out.println("Escolha outro critério");
     }
 
 }
