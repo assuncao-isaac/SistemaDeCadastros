@@ -15,13 +15,13 @@ public class Pet {
     }
 
     public void setNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()){
+        if (nome == null || nome.trim().isEmpty()) {
             this.nome = NAOINFORME;
-        }
-        else {
+            System.out.println(NAOINFORME);
+        } else {
             String regex = "[A-Za-z]+( [A-Za-z]+)+";
             if (!nome.matches(regex)) {
-                throw new IllegalArgumentException("O pet não pode ter nome com caracteres especiais ou números e precisa de nome sobrenome");
+                throw new IllegalArgumentException("O pet precisa de nome e sobrenome (sem carcteres especiais ou números)");
             }
             this.nome = nome;
         }
@@ -34,14 +34,12 @@ public class Pet {
     public void setTipo(String tipo) {
         Tipo cachorro = (Tipo.CACHORRO);
         Tipo gato = (Tipo.GATO);
-        if (tipo.equalsIgnoreCase("cachorro")){
+        if (tipo.equalsIgnoreCase("cachorro")) {
             this.tipo = cachorro;
-        }
-        else if (tipo.equalsIgnoreCase("gato")){
+        } else if (tipo.equalsIgnoreCase("gato")) {
             this.tipo = gato;
-        }
-        else {
-            throw new IllegalArgumentException("O pet só pode ser gatou ou cachorro");
+        } else {
+            System.out.println("O tipo do pet é obrigatório");
         }
     }
 
@@ -52,13 +50,11 @@ public class Pet {
     public void setSexo(String sexo) {
         Sexo macho = (Sexo.MACHO);
         Sexo femea = (Sexo.FEMEA);
-        if (sexo.equalsIgnoreCase("macho")){
+        if (sexo.equalsIgnoreCase("macho")) {
             this.sexo = macho;
-        }
-        else if (sexo.equalsIgnoreCase("femea")){
+        } else if (sexo.equalsIgnoreCase("femea")) {
             this.sexo = femea;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("O pet só pode ser Macho ou Fêmea");
         }
     }
@@ -72,10 +68,9 @@ public class Pet {
         StringBuilder enderecoTemp = new StringBuilder();
         System.out.println("Número da casa?");
         enderecoTemp.append(sc.nextLine());
-        if (enderecoTemp.toString().isBlank() || enderecoTemp.isEmpty()){
+        if (enderecoTemp.toString().isBlank() || enderecoTemp.isEmpty()) {
             this.endereco = NAOINFORME;
-        }
-        else {
+        } else {
             System.out.println("Cidade?");
             enderecoTemp.append(sc.nextLine());
             System.out.println("Rua?");
@@ -95,8 +90,7 @@ public class Pet {
     public void setIdade(String idade) {
         if (idade == null || idade.isBlank()) {
             this.idade = NAOINFORME;
-        }
-        else {
+        } else {
             double temp = Double.parseDouble(VerificadorDouble(idade));
             if (temp > 1) {
                 double resto;
@@ -117,8 +111,7 @@ public class Pet {
     public void setPeso(String peso) {
         if (peso == null || peso.isBlank()) {
             this.peso = NAOINFORME;
-        }
-        else {
+        } else {
             double temp = Double.parseDouble(VerificadorDouble(peso));
             if (temp > 60 || temp < 0.5) {
                 throw new IllegalArgumentException("O peso deve ser maior que 0.5kg ou menor que 60kg");
@@ -143,7 +136,7 @@ public class Pet {
 
     public void setRaca(String raca) {
         String regex = "[A-Za-z ]+";
-        if (!raca.matches(regex)){
+        if (!raca.matches(regex)) {
             throw new IllegalArgumentException("O pet não pode ter nome com caracteres especiais ou números e precisa de nome sobrenome");
         }
         this.raca = raca;

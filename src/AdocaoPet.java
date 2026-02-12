@@ -10,15 +10,17 @@ public class AdocaoPet {
             File file = new File("menu.txt");
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
                 String linha;
-                while ((linha = bufferedReader.readLine()) != null){
+                while ((linha = bufferedReader.readLine()) != null) {
                     System.out.println(linha);
                 }
                 escolha = sc.nextInt();
-                switch (escolha){
+                switch (escolha) {
                     case 1:
                         cadastrarNovoPet();
-                    break;
+                        break;
                     case 2:
+                    System.out.println("Qual o tipo do pet?(Cachorro/Gato)");
+                    buscadorDePet(sc.nextLine());
                         break;
                     case 3:
                         break;
@@ -31,38 +33,90 @@ public class AdocaoPet {
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-            catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 throw new IllegalArgumentException("Argumento inválido");
             }
-        }while(escolha <= 0 || escolha > 6);
+        } while (escolha != 6);
 
     }
 
 
-        private static void cadastrarNovoPet() {
+    private static void cadastrarNovoPet() {
         Scanner sc = new Scanner(System.in);
-            Pet novoPet = new Pet();
-            File file = new File("formulario.txt");
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-                System.out.println(bufferedReader.readLine());
-                novoPet.setNome(sc.nextLine());
-                System.out.println(bufferedReader.readLine());
-                novoPet.setTipo(sc.nextLine());
-                System.out.println(bufferedReader.readLine());
-                novoPet.setSexo(sc.nextLine());
-                System.out.println(bufferedReader.readLine());
-                novoPet.setEndereco();
-                System.out.println(bufferedReader.readLine());
-                novoPet.setIdade(sc.nextLine());
-                System.out.println(bufferedReader.readLine());
-                novoPet.setPeso(sc.nextLine());
-                System.out.println(bufferedReader.readLine());
-                novoPet.setRaca(sc.nextLine());
-                System.out.println(novoPet);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        Pet novoPet = new Pet();
+        File file = new File("formulario.txt");
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            int contador = 1;
+            for (String linha : bufferedReader.readAllLines()) {
+                System.out.println(linha);
+                switch (contador) {
+                    case 1:
+                        novoPet.setNome(sc.nextLine());
+                        break;
+                    case 2:
+                        novoPet.setTipo(sc.nextLine());
+                        break;
+                    case 3:
+                        novoPet.setSexo(sc.nextLine());
+                        break;
+                    case 4:
+                        novoPet.setEndereco();
+                        break;
+                    case 5:
+                        novoPet.setIdade(sc.nextLine());
+                        break;
+                    case 6:
+                        novoPet.setPeso(sc.nextLine());
+                        break;
+                    case 7:
+                        novoPet.setRaca(sc.nextLine());
+                        break;
+                    default:
+                        break;
+
+                }
+                contador++;
             }
 
+            System.out.println(novoPet);
+            Arquivos arquivos = new Arquivos();
+            arquivos.criacaodeArquivo(novoPet);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private static void buscadorDePet(String procura) throws FileNotFoundException {
+        File pastaPet = new File("C:\\Users\\isaacassuncao\\IdeaProjects\\SistemaDeCadastros\\petsCadastrados");
+        File[] pets = pastaPet.listFiles();
+
+
+        if (pets != null) {
+            int listagem = 1;
+            for (File pet : pets) {
+                if (pet.getName().endsWith(".txt")) {
+                    try (BufferedReader leitor = new BufferedReader(new FileReader(pet))) {
+                        String linha;
+                        while ((linha = leitor.readLine()) != null) {
+                            if (linha.toLowerCase().contains(procura.toLowerCase())) {
+                                BufferedReader leitor2 = new BufferedReader(new FileReader(pet));
+                                System.out.print(listagem);
+                                while ((linha = leitor2.readLine()) != null) {
+                                    System.out.print(" - " + linha.split(" - ", 2)[1]);
+                                }
+                                listagem++;
+                                System.out.println(" ");
+                                leitor2.close();
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new FileNotFoundException("Arquivo não encontrado");
+                    }
+
+                }
+            }
         }
     }
+
+}
