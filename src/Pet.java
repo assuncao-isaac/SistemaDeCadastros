@@ -31,15 +31,18 @@ public class Pet {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public boolean setTipo(String tipo) {
         Tipo cachorro = (Tipo.CACHORRO);
         Tipo gato = (Tipo.GATO);
         if (tipo.equalsIgnoreCase("cachorro")) {
             this.tipo = cachorro;
+            return true;
         } else if (tipo.equalsIgnoreCase("gato")) {
             this.tipo = gato;
+            return true;
         } else {
-            System.out.println("O tipo do pet é obrigatório");
+            System.out.println("informar o tipo do pet é obrigatório");
+            return false;
         }
     }
 
@@ -47,15 +50,18 @@ public class Pet {
         return sexo;
     }
 
-    public void setSexo(String sexo) {
+    public boolean setSexo(String sexo) {
         Sexo macho = (Sexo.MACHO);
         Sexo femea = (Sexo.FEMEA);
         if (sexo.equalsIgnoreCase("macho")) {
             this.sexo = macho;
+            return true;
         } else if (sexo.equalsIgnoreCase("femea")) {
             this.sexo = femea;
+            return true;
         } else {
-            throw new IllegalArgumentException("O pet só pode ser Macho ou Fêmea");
+            System.out.println("Informar o sexo do pet é obrigatorio");
+            return false;
         }
     }
 
@@ -134,12 +140,14 @@ public class Pet {
         return raca;
     }
 
-    public void setRaca(String raca) {
+    public boolean setRaca(String raca) {
         String regex = "[A-Za-z ]+";
         if (!raca.matches(regex)) {
-            throw new IllegalArgumentException("O pet não pode ter nome com caracteres especiais ou números e precisa de nome sobrenome");
+            System.out.println("Obrigatorio informar uma raça valida");
+            return false;
         }
         this.raca = raca;
+        return true;
     }
 
     @Override

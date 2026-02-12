@@ -47,6 +47,7 @@ public class AdocaoPet {
         File file = new File("formulario.txt");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             int contador = 1;
+            boolean sim;
             for (String linha : bufferedReader.readAllLines()) {
                 System.out.println(linha);
                 switch (contador) {
@@ -54,10 +55,14 @@ public class AdocaoPet {
                         novoPet.setNome(sc.nextLine());
                         break;
                     case 2:
-                        novoPet.setTipo(sc.nextLine());
+                        do {
+                            sim = novoPet.setTipo(sc.nextLine());
+                        }while (!sim);
                         break;
                     case 3:
-                        novoPet.setSexo(sc.nextLine());
+                        do {
+                            sim = novoPet.setSexo(sc.nextLine());
+                        }while (!sim);
                         break;
                     case 4:
                         novoPet.setEndereco();
@@ -69,7 +74,9 @@ public class AdocaoPet {
                         novoPet.setPeso(sc.nextLine());
                         break;
                     case 7:
-                        novoPet.setRaca(sc.nextLine());
+                        do {
+                            sim = novoPet.setRaca(sc.nextLine());
+                        }while (!sim);
                         break;
                     default:
                         break;
