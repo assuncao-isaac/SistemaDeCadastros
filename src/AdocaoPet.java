@@ -1,5 +1,7 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class AdocaoPet {
@@ -95,43 +97,60 @@ public class AdocaoPet {
 
     private static void buscadorDePet() throws FileNotFoundException {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Qual o tipo do pet?(Cachorro/Gato)");
-        String procura = sc.nextLine().trim();
-        while (!procura.equalsIgnoreCase("cachorro") && !procura.equalsIgnoreCase("gato")) {
-            System.out.println("informar o tipo do pet é obrigatório");
-            procura = sc.nextLine();
+        String procura = "";
+        while (procura.isEmpty()) {
+            System.out.println("Qual o tipo do pet?\n1 - Cachorro\n2 - Gato");
+            switch (sc.nextLine().trim()) {
+                case "1":
+                    procura = "cachorro";
+                    break;
+                case "2":
+                    procura = "gato";
+                    break;
+                default:
+                    System.out.println("Inválido");
+                    break;
+            }
         }
-
-        File pastaPet = new File("C:\\Users\\isaacassuncao\\IdeaProjects\\SistemaDeCadastros\\petsCadastrados");
+        File pastaPet = new File("petsCadastrados");
+        ArrayList<File> petsTipo = new ArrayList<>();
         File[] pets = pastaPet.listFiles();
-
 
         if (pets != null) {
             int listagem = 1;
             for (File pet : pets) {
+                boolean escreva = false;
                 if (pet.getName().endsWith(".txt")) {
                     try (BufferedReader leitor = new BufferedReader(new FileReader(pet))) {
-                        String linha;
-                        while ((linha = leitor.readLine()) != null) {
-                            if (linha.toLowerCase().contains(procura.toLowerCase())) {
-                                BufferedReader leitor2 = new BufferedReader(new FileReader(pet));
-                                System.out.print(listagem);
-                                while ((linha = leitor2.readLine()) != null) {
-                                    System.out.print(" - " + linha.split(" - ", 2)[1]);
-                                }
-                                listagem++;
-                                System.out.println(" ");
-                                leitor2.close();
+                        StringBuilder linha = new StringBuilder();
+                        while (leitor.read() != -1) {
+                            linha.append(leitor.readLine().split(" - ", 2)[1]).append(" - ");
+                            if (linha.toString().toLowerCase().contains(procura.toLowerCase())) {
+                                escreva = true;
                             }
+
+                        }
+                        if (escreva) {
+                            petsTipo.add(pet);
+                            System.out.print(listagem +" "+ linha);
+                            System.out.println();
+                            listagem++;
+
                         }
                     } catch (IOException e) {
                         throw new FileNotFoundException("Arquivo não encontrado");
                     }
-
                 }
             }
+            if (listagem == 1) {
+                System.out.println("Nenhum arquivo com o critério: \"" + procura + "\" encontrado");
+            }
         }
-        System.out.println("Escolha outro critério");
+        System.out.println("=========================================================");
+//        else{
+//            buscadorDePet(petsTipo);
+//        }
     }
+
 
 }
