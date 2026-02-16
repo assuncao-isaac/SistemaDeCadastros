@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class AdocaoPet {
@@ -114,42 +114,71 @@ public class AdocaoPet {
         }
         File pastaPet = new File("petsCadastrados");
         ArrayList<File> petsTipo = new ArrayList<>();
-        File[] pets = pastaPet.listFiles();
 
-        if (pets != null) {
-            int listagem = 1;
-            for (File pet : pets) {
-                boolean escreva = false;
-                if (pet.getName().endsWith(".txt")) {
-                    try (BufferedReader leitor = new BufferedReader(new FileReader(pet))) {
-                        StringBuilder linha = new StringBuilder();
-                        while (leitor.read() != -1) {
-                            linha.append(leitor.readLine().split(" - ", 2)[1]).append(" - ");
-                            if (linha.toString().toLowerCase().contains(procura.toLowerCase())) {
-                                escreva = true;
-                            }
 
-                        }
-                        if (escreva) {
-                            petsTipo.add(pet);
-                            System.out.print(listagem +" "+ linha);
-                            System.out.println();
-                            listagem++;
-
-                        }
-                    } catch (IOException e) {
-                        throw new FileNotFoundException("Arquivo não encontrado");
+        if (pastaPet != null) {
+            petsTipo.addAll(Arrays.asList(pastaPet.listFiles()));
+            petsTipo = busca(petsTipo, procura);
+        }
+        if (petsTipo.isEmpty()) {
+            System.out.println("Nenhum arquivo com o critério: \"" + procura + "\" encontrado");
+        } else {
+            procura = "";
+            int criterio;
+            System.out.println("Quantidade de critérios de busca:");
+            System.out.println("------- > 1");
+            System.out.println("------- > 2");
+            criterio = sc.nextInt();
+            for (int i = 0; i <= criterio; i++) {
+                while (procura.isEmpty()) {
+                    System.out.println("Escolha o " + (i+1) + "* critério de busca:\n1 - Nome \n2 - Sexo\n3 - Idade\n4 - Peso\n5 - Raça\n6 - Endereço");
+                    switch (sc.nextLine().trim()) {
+                        case "1":
+                            break;
+                        case "2":
+                            break;
+                        case "3":
+                            break;
+                        case "4":
+                            break;
+                        case "5":
+                            break;
+                        case "6":
+                            break;
+                        default:
+                            System.out.println("Inválido");
+                            break;
                     }
                 }
             }
-            if (listagem == 1) {
-                System.out.println("Nenhum arquivo com o critério: \"" + procura + "\" encontrado");
+        }
+    }
+
+    private static ArrayList<File> busca(ArrayList<File> pets, String procura) throws FileNotFoundException {
+        ArrayList<File> petsTipo = new ArrayList<>();
+        for (File pet : pets) {
+            boolean escreva = false;
+            if (pet.getName().endsWith(".txt")) {
+                try (BufferedReader leitor = new BufferedReader(new FileReader(pet))) {
+                    StringBuilder linha = new StringBuilder();
+                    while (leitor.read() != -1) {
+                        linha.append(leitor.readLine().split(" - ", 2)[1]).append(" - ");
+                        if (linha.toString().toLowerCase().contains(procura.toLowerCase())) {
+                            escreva = true;
+                        }
+
+                    }
+                    if (escreva) {
+                        petsTipo.add(pet);
+                        System.out.print(petsTipo.size() + " " + linha);
+                        System.out.println();
+                    }
+                } catch (IOException e) {
+                    throw new FileNotFoundException("Arquivo não encontrado");
+                }
             }
         }
-        System.out.println("=========================================================");
-//        else{
-//            buscadorDePet(petsTipo);
-//        }
+        return petsTipo;
     }
 
 
