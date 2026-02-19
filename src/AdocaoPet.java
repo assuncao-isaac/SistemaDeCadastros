@@ -115,7 +115,7 @@ public class AdocaoPet {
         File pastaPet = new File("petsCadastrados");
         ArrayList<File> petsTipo = new ArrayList<>();
 
-
+        Pet pet = new Pet();
         if (pastaPet != null) {
             petsTipo.addAll(Arrays.asList(pastaPet.listFiles()));
             petsTipo = busca(petsTipo, procura);
@@ -129,35 +129,58 @@ public class AdocaoPet {
             System.out.println("------- > 1");
             System.out.println("------- > 2");
             criterio = sc.nextInt();
-            for (int i = 0; i <= criterio; i++) {
-                while (procura.isEmpty()) {
+            sc.nextLine();
+            for (int i = 0; i < criterio; i++) {
+                boolean repetir = false;
+                do {
                     System.out.println("Escolha o " + (i+1) + "* critério de busca:\n1 - Nome \n2 - Sexo\n3 - Idade\n4 - Peso\n5 - Raça\n6 - Endereço");
                     switch (sc.nextLine().trim()) {
                         case "1":
+                            System.out.println( "Nome para busca:");
+                            pet.setNome(sc.nextLine());
+                            procura = pet.getNome();
                             break;
                         case "2":
+                            System.out.println( "Sexo para busca:");
+                            pet.setSexo(sc.nextLine());
+                            procura = pet.getSexo();
                             break;
                         case "3":
+                            System.out.println( "Idade para busca:");
+                            pet.setIdade(sc.nextLine());
+                            procura = pet.getIdade();
                             break;
                         case "4":
+                            System.out.println( "Peso para busca:");
+                            pet.setPeso(sc.nextLine());
+                            procura = pet.getPeso();
                             break;
                         case "5":
+                            System.out.println( "Raça para busca:");
+                            pet.setRaca(sc.nextLine());
+                            procura = pet.getRaca();
                             break;
                         case "6":
+                            System.out.println( "Endereço para busca:");
+                            pet.setEndereco();
+                            procura = pet.getEndereco();
                             break;
                         default:
                             System.out.println("Inválido");
+                            repetir = true;
                             break;
                     }
-                }
+                }while (repetir);
+                petsTipo = busca(petsTipo,procura);
             }
         }
     }
 
     private static ArrayList<File> busca(ArrayList<File> pets, String procura) throws FileNotFoundException {
         ArrayList<File> petsTipo = new ArrayList<>();
+        boolean escreva;
         for (File pet : pets) {
-            boolean escreva = false;
+            escreva = false;
             if (pet.getName().endsWith(".txt")) {
                 try (BufferedReader leitor = new BufferedReader(new FileReader(pet))) {
                     StringBuilder linha = new StringBuilder();

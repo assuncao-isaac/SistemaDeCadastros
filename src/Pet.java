@@ -46,8 +46,8 @@ public class Pet {
         }
     }
 
-    public Sexo getSexo() {
-        return sexo;
+    public String getSexo() {
+        return sexo.getSexo();
     }
 
     public boolean setSexo(String sexo) {

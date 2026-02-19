@@ -15,7 +15,7 @@ public class Arquivos {
 
         File file = new File("C:\\Users\\isaacassuncao\\IdeaProjects\\SistemaDeCadastros\\petsCadastrados\\" + nomeArquivo);
         try (FileWriter fileWriter = new FileWriter(file)) {
-            String[] strings = new String[]{pet.getNome(), pet.getTipo().getDescricao(), pet.getSexo().getSexo(), pet.getEndereco(), String.format("%s anos", pet.getIdade()), String.format("%s KG", pet.getPeso()), String.format("Raça: %s", pet.getRaca())};
+            String[] strings = new String[]{pet.getNome(), pet.getTipo().getDescricao(), pet.getSexo(), pet.getEndereco(), String.format("%s anos", pet.getIdade()), String.format("%s KG", pet.getPeso()), String.format("Raça: %s", pet.getRaca())};
             System.out.println(file.createNewFile());
             for (int i = 0; i <= strings.length - 1; i++) {
                 fileWriter.write((i + 1) + " - " + strings[i] + "\n");
