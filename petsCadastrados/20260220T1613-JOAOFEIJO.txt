@@ -1,0 +1,7 @@
+1 - Joao Feijo
+2 - Cachorro
+3 - Macho
+4 - Casa:11Cidade:São pauloRua:35
+5 - 15.0 anos
+6 - 7.0 KG
+7 - Raça: Labrador

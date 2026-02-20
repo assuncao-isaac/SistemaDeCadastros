@@ -1,7 +1,0 @@
-1 - joao feijo
-2 - Cachorro
-3 - Macho
-4 - Não informado
-5 - 11.0 anos
-6 - 17.0 KG
-7 - Raça: labrador

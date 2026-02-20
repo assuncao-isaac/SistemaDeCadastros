@@ -73,19 +73,19 @@ public class Pet {
         Scanner sc = new Scanner(System.in);
         StringBuilder enderecoTemp = new StringBuilder();
         System.out.println("Número da casa?");
-        enderecoTemp.append(sc.nextLine());
-        if (enderecoTemp.toString().isBlank() || enderecoTemp.isEmpty()) {
+        String casa = sc.nextLine();
+        if (casa.isBlank()) {
             this.endereco = NAOINFORME;
         } else {
+            enderecoTemp.append("Casa:").append(casa);
             System.out.println("Cidade?");
-            enderecoTemp.append(sc.nextLine());
+            enderecoTemp.append("Cidade:").append(sc.nextLine());
             System.out.println("Rua?");
-            enderecoTemp.append(sc.nextLine());
+            enderecoTemp.append("Rua:").append(sc.nextLine());
             if (enderecoTemp.isEmpty()) {
                 throw new IllegalArgumentException("O pet precisa de um endereco");
             }
             this.endereco = enderecoTemp.toString();
-            System.out.println(endereco);
         }
     }
 
