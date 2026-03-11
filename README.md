@@ -90,7 +90,7 @@ O projeto foi desenvolvido utilizando <strong>Java puro</strong>, aplicando os s
 
 Desenvolvido por <strong>Isaac Assunção da Silva</strong>  
 
-🔗 <a href="https://www.linkedin.com/in/isaac-assunção-23741a388" target="_blank">LinkedIn</a>
+🔗 <a href="www.linkedin.com/in/isaac-assuncao" target="_blank">LinkedIn</a>
 
 ---
 
