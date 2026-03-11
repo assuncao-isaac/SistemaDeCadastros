@@ -118,7 +118,7 @@ public class AdocaoPet {
 
         String procura = "";
         Pet pet = new Pet();
-        if (pastaPet != null) {
+        if (    pastaPet != null) {
             petsTipo.addAll(Arrays.asList(pastaPet.listFiles()));
             petsTipo = busca(petsTipo, tipo);
         }
@@ -179,8 +179,7 @@ public class AdocaoPet {
             do {
                 System.out.println("Qual pet corresponde ao de sua procura ?");
                 petEscolhido = sc.nextInt() - 1;
-
-            } while (!petsTipo.get(petEscolhido).exists());
+            } while (petsTipo.size() <= petEscolhido);
             alterandoDados(petsTipo.get(petEscolhido), tipo, buscaSilenciosa(petsTipo.get(petEscolhido)));
         }
     }
