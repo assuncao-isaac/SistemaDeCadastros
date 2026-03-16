@@ -24,12 +24,20 @@ public class Arquivos {
             throw new RuntimeException("Erro na criação do arquivo");
         }
     }
-    void excluirArquivo(File file){
+    void excluirErenomear(File file){
         if (file.delete()) {
-            System.out.println("Arquivo renomeado!");
+            System.out.println("Cadastro renomeado!");
         } else {
-            System.out.println("Não foi possível apagar o arquivo.");
+            System.out.println("Não foi possível apagar o cadastro.");
         }
     }
+    void excluirArquivo(File file){
+        if (file.delete()) {
+            System.out.println("Cadastro excluído com sucesso!");
+        } else {
+            System.out.println("Não foi possível apagar o cadastro.");
+        }
+    }
+
 
 }

@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AdocaoPet {
     public static void main(String[] args) {
@@ -18,12 +20,13 @@ public class AdocaoPet {
                 escolha = sc.nextInt();
                 switch (escolha) {
                     case 1:
-                        alterandoDados();
+                        cadastroPet();
                         break;
                     case 2:
-                        buscadorDePet();
+                        buscaPAlterar();
                         break;
                     case 3:
+                        buscaPExcluir();
                         break;
                     case 4:
                         break;
@@ -42,7 +45,7 @@ public class AdocaoPet {
     }
 
 
-    private static void alterandoDados() {
+    private static void cadastroPet() {
         Scanner sc = new Scanner(System.in);
         Pet novoPet = new Pet();
         File file = new File("formulario.txt");
@@ -95,10 +98,10 @@ public class AdocaoPet {
 
     }
 
-    private static void buscadorDePet() throws FileNotFoundException {
+    private static void buscaPAlterar() throws FileNotFoundException {
         Scanner sc = new Scanner(System.in);
+
         String tipo = "";
-        String sexo;
         while (tipo.isEmpty()) {
             System.out.println("Qual o tipo do pet?\n1 - Cachorro\n2 - Gato");
             switch (sc.nextLine().trim()) {
@@ -113,19 +116,21 @@ public class AdocaoPet {
                     break;
             }
         }
+
         File pastaPet = new File("petsCadastrados");
         ArrayList<File> petsTipo = new ArrayList<>();
-
-        String procura = "";
-        Pet pet = new Pet();
-        if (    pastaPet != null) {
+        if (pastaPet.listFiles() != null) {
             petsTipo.addAll(Arrays.asList(pastaPet.listFiles()));
             petsTipo = busca(petsTipo, tipo);
+        }else {
+            System.out.println("a pasta de pets está vazia");
         }
         if (petsTipo.isEmpty()) {
-            System.out.println("Nenhum arquivo com o critério: \"" + procura + "\" encontrado");
-        } else {
-            procura = "";
+            System.out.println("Nenhum arquivo com o critério: \"" + tipo + "\" encontrado");
+        }
+
+        Pet pet = new Pet();
+        String procura = "";
             int criterio;
             System.out.println("Quantidade de critérios de busca:");
             System.out.println("------- > 1");
@@ -180,8 +185,7 @@ public class AdocaoPet {
                 System.out.println("Qual pet corresponde ao de sua procura ?");
                 petEscolhido = sc.nextInt() - 1;
             } while (petsTipo.size() <= petEscolhido);
-            alterandoDados(petsTipo.get(petEscolhido), tipo, buscaSilenciosa(petsTipo.get(petEscolhido)));
-        }
+            cadastroPet(petsTipo.get(petEscolhido), tipo, buscaSexo(petsTipo.get(petEscolhido)));
     }
 
     private static ArrayList<File> busca(ArrayList<File> pets, String procura) throws FileNotFoundException {
@@ -211,7 +215,7 @@ public class AdocaoPet {
         }
         return petsTipo;
     }
-    private static String buscaSilenciosa(File petPalterar) throws FileNotFoundException {
+    private static String buscaSexo(File petPalterar) throws FileNotFoundException {
         String sexo = "";
                 try (BufferedReader leitor = new BufferedReader(new FileReader(petPalterar))) {
                     StringBuilder linha = new StringBuilder();
@@ -231,7 +235,7 @@ public class AdocaoPet {
         return sexo;
     }
 
-    private static void alterandoDados(File petPalterar, String tipo, String sexo) {
+    private static void cadastroPet(File petPalterar, String tipo, String sexo) {
         System.out.println("!!!ALTERANDO OS DADOS DO PET!!!!");
         Scanner sc = new Scanner(System.in);
         Pet novoPet = new Pet();
@@ -277,11 +281,126 @@ public class AdocaoPet {
             System.out.println(novoPet);
             Arquivos arquivos = new Arquivos();
             arquivos.criacaodeArquivo(novoPet);
-            arquivos.excluirArquivo(petPalterar);
+            arquivos.excluirErenomear(petPalterar);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+    private static void buscaPExcluir() throws FileNotFoundException {
+        Scanner sc = new Scanner(System.in);
+
+        String tipo = "";
+        while (tipo.isEmpty()) {
+            System.out.println("Qual o tipo do pet?\n1 - Cachorro\n2 - Gato");
+            switch (sc.nextLine().trim()) {
+                case "1":
+                    tipo = "cachorro";
+                    break;
+                case "2":
+                    tipo = "gato";
+                    break;
+                default:
+                    System.out.println("Inválido");
+                    break;
+            }
+        }
+
+        File pastaPet = new File("petsCadastrados");
+        ArrayList<File> petsTipo = new ArrayList<>();
+        if (pastaPet.listFiles() != null) {
+            petsTipo.addAll(Arrays.asList(pastaPet.listFiles()));
+            petsTipo = busca(petsTipo, tipo);
+        }else {
+            System.out.println("a pasta de pets está vazia");
+        }
+        if (petsTipo.isEmpty()) {
+            System.out.println("Nenhum arquivo com o critério: \"" + tipo + "\" encontrado");
+        }
+
+        Pet pet = new Pet();
+        String procura = "";
+        int criterio;
+        System.out.println("Quantidade de critérios de busca:");
+        System.out.println("------- > 1");
+        System.out.println("------- > 2");
+        criterio = sc.nextInt();
+        sc.nextLine();
+        for (int i = 0; i < criterio; i++) {
+            boolean repetir = false;
+            do {
+                System.out.println("Escolha o " + (i + 1) + "* critério de busca:\n1 - Nome \n2 - Sexo\n3 - Idade\n4 - Peso\n5 - Raça\n6 - Endereço");
+                switch (sc.nextLine().trim()) {
+                    case "1":
+                        System.out.println("Nome para busca:");
+                        pet.setNome(sc.nextLine());
+                        procura = pet.getNome();
+                        break;
+                    case "2":
+                        System.out.println("Sexo para busca:");
+                        pet.setSexo(sc.nextLine());
+                        procura = pet.getSexo();
+                        break;
+                    case "3":
+                        System.out.println("Idade para busca:");
+                        pet.setIdade(sc.nextLine());
+                        procura = pet.getIdade();
+                        break;
+                    case "4":
+                        System.out.println("Peso para busca:");
+                        pet.setPeso(sc.nextLine());
+                        procura = pet.getPeso();
+                        break;
+                    case "5":
+                        System.out.println("Raça para busca:");
+                        pet.setRaca(sc.nextLine());
+                        procura = pet.getRaca();
+                        break;
+                    case "6":
+                        System.out.println("Endereço para busca:");
+                        pet.setEndereco();
+                        procura = pet.getEndereco();
+                        break;
+                    default:
+                        System.out.println("Inválido");
+                        repetir = true;
+                        break;
+                }
+            } while (repetir);
+            petsTipo = busca(petsTipo, procura);
+        }
+        int petEscolhido;
+        do {
+            System.out.println("Qual pet corresponde ao de sua procura ?");
+            petEscolhido = sc.nextInt() - 1;
+        } while (petsTipo.size() <= petEscolhido);
+        metodoexcluir(petsTipo.get(petEscolhido));
+    }
+
+    private static void metodoexcluir(File petPexcluir) {
+        Scanner sc = new Scanner(System.in);
+        Pattern pattern = Pattern.compile("-(\\w+)");
+        Matcher matcher = pattern.matcher(petPexcluir.getName());
+        System.out.println("Tem certeza que deseja excluir o pet " + matcher.group(1) + "?");
+        Arquivos arquivos = new Arquivos();
+        boolean respostaCorreta = false;
+        while (!respostaCorreta) {
+            System.out.println("1 -> SIM");
+            System.out.println("2 -> NÃO");
+            switch (sc.nextLine().trim()) {
+                case "1":
+                    arquivos.excluirArquivo(petPexcluir);
+                    respostaCorreta = true;
+                    break;
+                case "2":
+                    System.out.println("Exclusão cancelada");
+                    respostaCorreta = true;
+                    break;
+                default:
+                    System.out.println("Inválido");
+                    break;
+            }
+        }
     }
 
 
