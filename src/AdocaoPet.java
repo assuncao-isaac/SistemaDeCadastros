@@ -29,6 +29,7 @@ public class AdocaoPet {
                         buscaPExcluir();
                         break;
                     case 4:
+                        listagemDePets();
                         break;
                     case 5:
                         break;
@@ -41,6 +42,26 @@ public class AdocaoPet {
                 throw new IllegalArgumentException("Argumento inválido");
             }
         } while (escolha != 6);
+
+    }
+
+    private static void listagemDePets() {
+        File pastaPets = new File("petsCadastrados");
+
+
+            File[] pets = pastaPets.listFiles();
+            try {
+                if (pets != null ) {
+                    System.out.println("============LISTAGEM==DE==PETS============");
+                    buscaTotal(pets);
+                    System.out.println("==========================================");
+                }
+                else{
+                    System.out.println("pets é nulo");
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("ERRO ao ler os arquivos de petsCadastrados");
+            }
 
     }
 
@@ -214,6 +235,25 @@ public class AdocaoPet {
             }
         }
         return petsTipo;
+    }
+    private static void buscaTotal(File[] pets) throws FileNotFoundException {
+        ArrayList<File> petsTipo = new ArrayList<>();
+        for (File pet : pets) {
+            if (pet.getName().endsWith(".txt")) {
+                try (BufferedReader leitor = new BufferedReader(new FileReader(pet))) {
+                    StringBuilder linha = new StringBuilder();
+                    while (leitor.read() != -1) {
+                        linha.append(leitor.readLine().split(" - ", 2)[1]).append(" - ");
+                    }
+                        petsTipo.add(pet);
+                        System.out.print(petsTipo.size() + " " + linha);
+                        System.out.println();
+
+                } catch (IOException e) {
+                    throw new FileNotFoundException("Arquivo não encontrado");
+                }
+            }
+        }
     }
     private static String buscaSexo(File petPalterar) throws FileNotFoundException {
         String sexo = "";
